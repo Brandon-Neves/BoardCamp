@@ -1,1 +1,1 @@
-import db from '../database/database.js'
+import {db} from '../database/database.js'
