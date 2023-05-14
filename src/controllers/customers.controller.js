@@ -3,7 +3,7 @@ import { db } from '../database/database.js'
 export async function getCustomers(req, res) {
   try {
     const { rows } = await db.query('SELECT * FROM customers;')
-    res.status(200).send(rows)
+    res.status(200).send(rows[0])
   } catch (err) {
     res.sendStatus(500)
   }

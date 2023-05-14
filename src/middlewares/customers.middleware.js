@@ -27,7 +27,7 @@ export async function validationCustomerId(req, res, next) {
       id
     ])
     if (!rows || rows.length === 0) return res.sendStatus(404)
-    res.locals.customer = rows[0]
+    res.locals.customer = rows
     next()
   } catch (err) {
     res.sendStatus(401)
