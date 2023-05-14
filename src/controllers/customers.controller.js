@@ -1,8 +1,11 @@
 import { db } from '../database/database.js'
+import dayjs from 'dayjs'
 
 export async function getCustomers(req, res) {
   try {
-    const { rows } = await db.query('SELECT * FROM customers;')
+    const { rows } = await db.query(
+      `SELECT *, to_char(birthday, 'YYYY-MM-DD') AS birthday FROM customers;`
+    )
     res.status(200).send(rows)
   } catch (err) {
     res.sendStatus(500)

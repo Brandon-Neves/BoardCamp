@@ -23,9 +23,10 @@ export async function validationCustomerId(req, res, next) {
   const id = req.params.id
 
   try {
-    const { rows } = await db.query(`SELECT * FROM customers WHERE id = $1;`, [
-      id
-    ])
+    const { rows } = await db.query(
+      `SELECT *, to_char(birthday, 'YYYY-MM-DD') AS birthday FROM customers WHERE id = $1;`,
+      [id]
+    )
     if (!rows || rows.length === 0) return res.sendStatus(404)
     res.locals.customer = rows
     next()
