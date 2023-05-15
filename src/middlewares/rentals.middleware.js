@@ -79,14 +79,22 @@ export async function deleteRentalsId(req, res, next) {
   const id = req.params.id
 
   try {
-    const { rows } = await db.query(`SELECT * FROM rentals WHERE id = $1`, [id])
-    const rentals = rows[0]
-    const { returnDate } = rentals
-    if (!rentals.id) return res.sendStatus(404)
-    if (returnDate !== null) return res.sendStatus(400)
+    const rentalsIdExist = await db.query(
+      `SELECT * FROM rentals WHERE id = $1`,
+      [id]
+    )
+
+    const { rows } = rentalsIdExist
+
+    if (rentalsIdExist.rowCount === 0) {
+      return res.sendStatus(404)
+    }
+    if (rows[0].returnDate === null) {
+      return res.sendStatus(400)
+    }
 
     next()
   } catch (err) {
-    res.sendStatus(500)
+    res.sendStatus(300)
   }
 }
