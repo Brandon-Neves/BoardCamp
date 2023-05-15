@@ -62,16 +62,29 @@ export async function validationRentalsId(req, res, next) {
       newRental.daysRented,
       'day'
     )
-
     const diffDays = dayjs().diff(dateExpireAt, 'day')
-
     let delayFee
-
     if (diffDays > 0) {
       delayFee = diffDays * (newRental.originalPrice / newRental.daysRented)
     }
 
     res.locals.rentals = { returnDate, delayFee, id }
+    next()
+  } catch (err) {
+    res.sendStatus(500)
+  }
+}
+
+export async function deleteRentalsId(req, res, next) {
+  const id = req.params.id
+
+  try {
+    const { rows } = await db.query(`SELECT * FROM rentals WHERE id = $1`, [id])
+    const rentals = rows[0]
+    const { returnDate } = rentals
+    if (!rentals.id) return res.sendStatus(404)
+    if (returnDate !== null) return res.sendStatus(400)
+
     next()
   } catch (err) {
     res.sendStatus(500)

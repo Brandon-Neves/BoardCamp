@@ -82,3 +82,14 @@ export async function finalizeRentals(req, res) {
     res.sendStatus(500)
   }
 }
+
+export async function deleteRentals(req, res) {
+  const id = req.params.id
+
+  try {
+    await db.query(`DELETE FROM rentals WHERE id = $1`, [id])
+    res.sendStatus(200)
+  } catch (err) {
+    res.sendStatus(500)
+  }
+}
