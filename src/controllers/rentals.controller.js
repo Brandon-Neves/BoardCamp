@@ -67,3 +67,18 @@ export async function createRentals(req, res) {
     res.sendStatus(500)
   }
 }
+
+export async function finalizeRentals(req, res) {
+  const { returnDate, delayFee, id } = res.locals.rentals
+  console.log(res.locals.rentals)
+  try {
+    await db.query(
+      `UPDATE rentals SET "returnDate" = $1, 
+      "delayFee" = $2 WHERE id = $3`,
+      [returnDate, delayFee, id]
+    )
+    res.sendStatus(200)
+  } catch (err) {
+    res.sendStatus(500)
+  }
+}

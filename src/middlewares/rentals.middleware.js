@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { db } from '../database/database.js'
 
 export async function validationCreateRentals(req, res, next) {
@@ -36,6 +37,41 @@ export async function validationCreateRentals(req, res, next) {
       newPrice
     }
     res.locals.rentals = rentals
+    next()
+  } catch (err) {
+    res.sendStatus(500)
+  }
+}
+
+export async function validationRentalsId(req, res, next) {
+  const id = req.params.id
+
+  try {
+    const rentalsIdExist = await db.query(
+      `SELECT * FROM rentals WHERE id = $1`,
+      [id]
+    )
+    const { rows } = rentalsIdExist
+    const newRental = rows[0]
+    console.log(rows[0])
+    if (rentalsIdExist.rowCount === 0) return res.sendStatus(404)
+    if (rows[0].returnDate != null) return res.sendStatus(400)
+
+    const returnDate = dayjs().format('YYYY-MM-DD')
+    const dateExpireAt = dayjs(newRental.rentDate, 'day').add(
+      newRental.daysRented,
+      'day'
+    )
+
+    const diffDays = dayjs().diff(dateExpireAt, 'day')
+
+    let delayFee
+
+    if (diffDays > 0) {
+      delayFee = diffDays * (newRental.originalPrice / newRental.daysRented)
+    }
+
+    res.locals.rentals = { returnDate, delayFee, id }
     next()
   } catch (err) {
     res.sendStatus(500)
