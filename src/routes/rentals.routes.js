@@ -2,11 +2,11 @@ import express from 'express'
 import { validateSchema } from '../middlewares/validateSchema.middleware.js'
 import { createRentalsSchema } from '../schemas/rentals.schema.js'
 import { validationCreateRentals } from '../middlewares/rentals.middleware.js'
-import { createRentals } from '../controllers/rentals.controller.js'
+import { createRentals, getRentals } from '../controllers/rentals.controller.js'
 
 const rentalsRouter = express.Router()
 
-rentalsRouter.get('/rentals')
+rentalsRouter.get('/rentals', getRentals)
 rentalsRouter.post(
   '/rentals',
   validateSchema(createRentalsSchema),

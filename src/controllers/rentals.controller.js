@@ -1,6 +1,42 @@
 import dayjs from 'dayjs'
 import { db } from '../database/database.js'
 
+export async function getRentals(req, res) {
+  try {
+    const { rows } = await db.query(`
+    SELECT rentals.*, 
+    customers.id AS "idCustomer", 
+    customers.name AS "idCustomerName", 
+    games.id AS "idGame", 
+    games.name AS "gameName" FROM rentals 
+    JOIN customers ON "customerId" = customers.id 
+    JOIN games ON "gameId" = games.id
+    `)
+
+    const rentals = rows.map(row => ({
+      id: row.id,
+      customerId: row.customerId,
+      gameId: row.gameId,
+      rentDate: dayjs(row.rentDate).format('YYYY-MM-DD'),
+      daysRented: row.daysRented,
+      returnDate: row.returnDate,
+      originalPrice: row.originalPrice,
+      delayFee: row.delayFee,
+      customer: {
+        id: row.idCustomer,
+        name: row.idCustomerName
+      },
+      game: {
+        id: row.gameId,
+        name: row.gameName
+      }
+    }))
+    res.send(rentals)
+  } catch (err) {
+    res.sendStatus(500)
+  }
+}
+
 export async function createRentals(req, res) {
   const { gameId, customerId, daysRented, newPrice } = res.locals.rentals
 
