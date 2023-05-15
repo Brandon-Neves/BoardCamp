@@ -70,7 +70,6 @@ export async function createRentals(req, res) {
 
 export async function finalizeRentals(req, res) {
   const { returnDate, delayFee, id } = res.locals.rentals
-  console.log(res.locals.rentals)
   try {
     await db.query(
       `UPDATE rentals SET "returnDate" = $1, 

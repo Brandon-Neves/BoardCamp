@@ -53,7 +53,6 @@ export async function validationRentalsId(req, res, next) {
     )
     const { rows } = rentalsIdExist
     const newRental = rows[0]
-    console.log(rows[0])
     if (rentalsIdExist.rowCount === 0) return res.sendStatus(404)
     if (rows[0].returnDate != null) return res.sendStatus(400)
 
@@ -95,6 +94,6 @@ export async function deleteRentalsId(req, res, next) {
 
     next()
   } catch (err) {
-    res.sendStatus(300)
+    res.sendStatus(500)
   }
 }
