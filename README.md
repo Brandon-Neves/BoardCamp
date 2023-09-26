@@ -32,7 +32,7 @@ This is an web application where it is possible to register games, separate them
 
 1. Clone this repository
 ```bash
-git clone https://github.com/LuSntgo/Boardcamp-API
+git clone https://github.com/Brandon-Neves/BoardCamp
 ```
 2. Clone the front-end repository at https://github.com/Brandon-Neves/BoardCamp and follow the instructions to run
 3. Create a Database using the ``dump.sql`` file inside the ``database`` folder by following these steps:
